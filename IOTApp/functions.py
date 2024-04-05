@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse, redirect, render
 import serial
-
+from django.http import JsonResponse
 pin = serial.Serial("COM7", 9600)
 
 def unit(bytes, suffix="B"):
@@ -17,12 +17,13 @@ def lighton(request):
     print("button clicked")
     pin.write(b"on13")
     return redirect("home")
-
+    return JsonResponse({'message': 'Light turned on'})
 
 def lightoff(request):
     print("button clicked")
     pin.write(b"off13")
     return redirect("home")
+    return JsonResponse({'message': 'Light turned off'})
 
 
 def relay_on_7(request):
@@ -75,6 +76,7 @@ def turn_on_all_relay(request):
     pin.write(b"on5")
     pin.write(b"on4")
     return redirect("home")
+    return JsonResponse({'message': 'All relays turned on'})
 
 
 def turn_off_all_relay(request):
@@ -83,3 +85,4 @@ def turn_off_all_relay(request):
     pin.write(b"off5")
     pin.write(b"off4")
     return redirect("home")
+    return JsonResponse({'message': 'All relays turned off'})

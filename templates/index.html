@@ -1,62 +1,101 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <title>Home Sync</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
     <style>
       /* Inline styles */
-      .image-container {
+      .container {
         text-align: center;
         margin-top: 20px;
       }
 
-      .image-container img {
+      .container img {
         max-width: 200px;
         height: auto;
         margin-bottom: 10px;
       }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .button-container form {
+        margin: 0 10px;
+      }
     </style>
     <script>
-      var buttonState = {
-        AllON: false,
-        AllOFF: false,
-        "Turn OFF BULB1": false,
-        "Turn ON BULB1": false,
-        "Turn OFF BULB2": false,
-        "Turn ON BULB2": false,
-      };
+      var bulb1State = false;
+      var bulb2State = false;
 
-      function toggleButton(button) {
-        var buttons = document.getElementsByClassName("btn");
-        for (var i = 0; i < buttons.length; i++) {
-          buttons[i].classList.remove("green");
-          buttons[i].classList.remove("red");
+      function toggleBulb(bulbNumber) {
+        var bulbImage1 = document.getElementById("bulb1-image");
+        var bulbImage2 = document.getElementById("bulb2-image");
+        var onButton = document.getElementById("on-button-bulb" + bulbNumber);
+        var offButton = document.getElementById("off-button-bulb" + bulbNumber);
+
+        if (bulbNumber === 1) {
+          bulb1State = !bulb1State;
+          if (bulb1State) {
+            bulbImage1.src = "{% static 'BULBon.png' %}";
+            onButton.classList.add("green");
+            offButton.classList.remove("red");
+          } else {
+            bulbImage1.src = "{% static 'BULBoff.png' %}";
+            onButton.classList.remove("green");
+            offButton.classList.add("red");
+          }
+          bulb2State = bulb1State;
+          updateBulb2();
+        } else if (bulbNumber === 2) {
+          bulb2State = !bulb2State;
+          if (bulb2State) {
+            bulbImage2.src = "{% static 'BULBon.png' %}";
+            onButton.classList.add("green");
+            offButton.classList.remove("red");
+          } else {
+            bulbImage2.src = "{% static 'BULBoff.png' %}";
+            onButton.classList.remove("green");
+            offButton.classList.add("red");
+          }
+          bulb1State = bulb2State;
+          updateBulb1();
         }
+      }
 
-        var buttonName = button.textContent.trim();
-        buttonState[buttonName] = !buttonState[buttonName];
+      function updateBulb1() {
+        var bulbImage1 = document.getElementById("bulb1-image");
+        var onButton = document.getElementById("on-button-bulb1");
+        var offButton = document.getElementById("off-button-bulb1");
 
-        button.classList.add(buttonState[buttonName] ? "green" : "red");
+        if (bulb1State) {
+          bulbImage1.src = "{% static 'BULBon.png' %}";
+          onButton.classList.add("green");
+          offButton.classList.remove("red");
+        } else {
+          bulbImage1.src = "{% static 'BULBoff.png' %}";
+          onButton.classList.remove("green");
+          offButton.classList.add("red");
+        }
+      }
 
-        // Update image source based on button click
-        var bulb1Image = document.getElementById("bulb1-image");
-        var bulb2Image = document.getElementById("bulb2-image");
-        if (buttonName === "Turn ON BULB1") {
-          bulb1Image.src = "/static/BULBon.png";
-        } else if (buttonName === "Turn OFF BULB1") {
-          bulb1Image.src = "/static/BULBoff.png";
-        } else if (buttonName === "Turn ON BULB2") {
-          bulb2Image.src = "/static/BULBon.png";
-        } else if (buttonName === "Turn OFF BULB2") {
-          bulb2Image.src = "/static/BULBoff.png";
-        } else if (buttonName === "AllON") {
-          bulb1Image.src = "/static/BULBon.png";
-          bulb2Image.src = "/static/BULBon.png";
-        } else if (buttonName === "AllOFF") {
-          bulb1Image.src = "/static/BULBoff.png";
-          bulb2Image.src = "/static/BULBoff.png";
+      function updateBulb2() {
+        var bulbImage2 = document.getElementById("bulb2-image");
+        var onButton = document.getElementById("on-button-bulb2");
+        var offButton = document.getElementById("off-button-bulb2");
+
+        if (bulb2State) {
+          bulbImage2.src = "{% static 'BULBon.png' %}";
+          onButton.classList.add("green");
+          offButton.classList.remove("red");
+        } else {
+          bulbImage2.src = "{% static 'BULBoff.png' %}";
+          onButton.classList.remove("green");
+          offButton.classList.add("red");
         }
       }
     </script>
@@ -67,12 +106,20 @@
       <h1>Control Lights</h1>
       <div class="button-container">
         <form action="AllON/" method="GET">
-          <button type="submit" class="btn green" onclick="toggleButton(this)">
+          <button
+            type="submit"
+            class="btn green"
+            onclick="toggleBulb(1); toggleBulb(2);"
+          >
             ALL ON (BULB1 & BULB2)
           </button>
         </form>
         <form action="AllOFF/" method="GET">
-          <button type="submit" class="btn red" onclick="toggleButton(this)">
+          <button
+            type="submit"
+            class="btn red"
+            onclick="toggleBulb(1); toggleBulb(2);"
+          >
             ALL OFF (BULB1 & BULB2)
           </button>
         </form>
@@ -80,35 +127,54 @@
       <div class="image-container">
         <img
           id="bulb1-image"
-          src="/static/BULBoff.png"
+          src="{% static 'BULBoff.png' %}"
+          src="{% static 'BULBoff.png' %}"
           alt="Bulb 1 Image"
-          style="width: 200px; height: auto"
         />
         <img
           id="bulb2-image"
-          src="/static/BULBoff.png"
+          src="{% static 'BULBoff.png' %}"
           alt="Bulb 2 Image"
-          style="width: 200px; height: auto"
         />
       </div>
       <div class="button-container">
         <form action="OFFRelay1/" method="GET">
-          <button type="submit" class="btn red" onclick="toggleButton(this)">
+          <button
+            id="off-button-bulb1"
+            type="submit"
+            class="btn red"
+            onclick="toggleBulb(1);"
+          >
             Turn OFF BULB1
           </button>
         </form>
         <form action="OnRelay1/" method="GET">
-          <button type="submit" class="btn green" onclick="toggleButton(this)">
+          <button
+            id="on-button-bulb1"
+            type="submit"
+            class="btn green"
+            onclick="toggleBulb(1);"
+          >
             Turn ON BULB1
           </button>
         </form>
         <form action="OFFRelay2/" method="GET">
-          <button type="submit" class="btn red" onclick="toggleButton(this)">
+          <button
+            id="off-button-bulb2"
+            type="submit"
+            class="btn red"
+            onclick="toggleBulb(2);"
+          >
             Turn OFF BULB2
           </button>
         </form>
         <form action="OnRelay2/" method="GET">
-          <button type="submit" class="btn green" onclick="toggleButton(this)">
+          <button
+            id="on-button-bulb2"
+            type="submit"
+            class="btn green"
+            onclick="toggleBulb(2);"
+          >
             Turn ON BULB2
           </button>
         </form>
