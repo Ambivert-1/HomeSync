@@ -69,7 +69,7 @@ def homepage(request):
     return render(request, "index.html")
 
 
-def turn_off_all_relay(request):
+def turn_on_all_relay(request):
     pin.write(b"on7")
     pin.write(b"on6")
     pin.write(b"on5")
@@ -77,7 +77,7 @@ def turn_off_all_relay(request):
     return redirect("home")
 
 
-def turn_on_all_relay(request):
+def turn_off_all_relay(request):
     pin.write(b"off7")
     pin.write(b"off6")
     pin.write(b"off5")

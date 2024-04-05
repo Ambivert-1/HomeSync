@@ -1,59 +1,118 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Home Sync</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <style>
+      /* Inline styles */
+      .image-container {
+        text-align: center;
+        margin-top: 20px;
+      }
 
-    <head>
-        <meta charset="UTF-8">
-        <title> SUSHI DASHBOARD</title>
-        <meta name="viewport" content="width=device-width, 
-    liinitial-scale=1.0">
-        <link rel="stylesheet" href="{% static 'styles.css' %}">
-        <link rel="shortcut icon" href="{% static 'svg/logo.svg' %}" type="image/x-icon">
-        <style>
-            *{
-                font-family: system-ui;
-            }
-        </style>
-    </head>
+      .image-container img {
+        max-width: 200px;
+        height: auto;
+        margin-bottom: 10px;
+      }
+    </style>
+    <script>
+      var buttonState = {
+        AllON: false,
+        AllOFF: false,
+        "Turn OFF BULB1": false,
+        "Turn ON BULB1": false,
+        "Turn OFF BULB2": false,
+        "Turn ON BULB2": false,
+      };
 
-    <body>
-    
-        <center>
-       
+      function toggleButton(button) {
+        var buttons = document.getElementsByClassName("btn");
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("green");
+          buttons[i].classList.remove("red");
+        }
 
-            <form action='OFFRelay1/' method='GET'>
-                <button type='submit' class="btn">OFF 1st Light</button>
-            </form>
-            <form action='OnRelay1/' method='GET'>
-                <button type='submit' class="btn">ON 1st Light</button>
-            </form>
+        var buttonName = button.textContent.trim();
+        buttonState[buttonName] = !buttonState[buttonName];
 
-            <form action='OFFRelay2/' method='GET'>
-                <button type='submit' class="btn">OFF 2nd Light</button>
-            </form>
-            <form action='OnRelay2/' method='GET'>
-                <button type='submit' class="btn">ON 2nd Light</button>
-            </form>
+        button.classList.add(buttonState[buttonName] ? "green" : "red");
 
+        // Update image source based on button click
+        var bulb1Image = document.getElementById("bulb1-image");
+        var bulb2Image = document.getElementById("bulb2-image");
+        if (buttonName === "Turn ON BULB1") {
+          bulb1Image.src = "/static/BULBon.png";
+        } else if (buttonName === "Turn OFF BULB1") {
+          bulb1Image.src = "/static/BULBoff.png";
+        } else if (buttonName === "Turn ON BULB2") {
+          bulb2Image.src = "/static/BULBon.png";
+        } else if (buttonName === "Turn OFF BULB2") {
+          bulb2Image.src = "/static/BULBoff.png";
+        } else if (buttonName === "AllON") {
+          bulb1Image.src = "/static/BULBon.png";
+          bulb2Image.src = "/static/BULBon.png";
+        } else if (buttonName === "AllOFF") {
+          bulb1Image.src = "/static/BULBoff.png";
+          bulb2Image.src = "/static/BULBoff.png";
+        }
+      }
+    </script>
+  </head>
 
-            <form action='OFFRelay3/' method='GET'>
-                <button type='submit' class="btn">OFF 3rd Light</button>
-            </form>
-            <form action='OnRelay3/' method='GET'>
-                <button type='submit' class="btn">ON 3rd Light</button>
-            </form>
-
-
-
-            <form action='OFFRelay4/' method='GET'>
-                <button type='submit' class="btn">OFF 4th Light</button>
-            </form>
-            <form action='OnRelay4/' method='GET'>
-                <button type='submit' class="btn">ON 4th Light</button>
-            </form>
-
-            <div class="commandinput">
-
-    </body>
-
+  <body>
+    <div class="container">
+      <h1>Control Lights</h1>
+      <div class="button-container">
+        <form action="AllON/" method="GET">
+          <button type="submit" class="btn green" onclick="toggleButton(this)">
+            ALL ON (BULB1 & BULB2)
+          </button>
+        </form>
+        <form action="AllOFF/" method="GET">
+          <button type="submit" class="btn red" onclick="toggleButton(this)">
+            ALL OFF (BULB1 & BULB2)
+          </button>
+        </form>
+      </div>
+      <div class="image-container">
+        <img
+          id="bulb1-image"
+          src="/static/BULBoff.png"
+          alt="Bulb 1 Image"
+          style="width: 200px; height: auto"
+        />
+        <img
+          id="bulb2-image"
+          src="/static/BULBoff.png"
+          alt="Bulb 2 Image"
+          style="width: 200px; height: auto"
+        />
+      </div>
+      <div class="button-container">
+        <form action="OFFRelay1/" method="GET">
+          <button type="submit" class="btn red" onclick="toggleButton(this)">
+            Turn OFF BULB1
+          </button>
+        </form>
+        <form action="OnRelay1/" method="GET">
+          <button type="submit" class="btn green" onclick="toggleButton(this)">
+            Turn ON BULB1
+          </button>
+        </form>
+        <form action="OFFRelay2/" method="GET">
+          <button type="submit" class="btn red" onclick="toggleButton(this)">
+            Turn OFF BULB2
+          </button>
+        </form>
+        <form action="OnRelay2/" method="GET">
+          <button type="submit" class="btn green" onclick="toggleButton(this)">
+            Turn ON BULB2
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>

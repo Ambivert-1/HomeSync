@@ -1,111 +1,82 @@
+/* styles.css */
 
-.system-info {
-    float: right;
-    display: flex;
-  }
-  
-  p {
-    text-align: center;
-    font-size: 3em;
-    font-weight: bolder;
-  }
-  
-  form {
-    margin: 10px;
-    display: inline-block;
-  }
-  
-  body {
-    background-color: #e8e8e8;
-    font-family: poppins, sans-serif;
-  }
-  
-  .btn {
-    display: inline-block;
-    /* padding: 10px 20px; */
-    width: 150px;
-    height: 40px;
-    border: unset;
-    border-radius: 10px;
-    color: #212121;
-    z-index: 1;
-    background: #e8e8e8;
-    position: relative;
-    font-weight: bold;
-    font-size: 17px;
-    font-family: poppins;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-    box-shadow: 4px 8px 19px -3px rgb(122 122 122 / 27%);
-    transition: all 250ms;
-  }
-  
-  .btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0;
-    border-radius: 11px;
-    background-color: #212121;
-    z-index: -1;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
-    transition: all 250ms;
-  }
-  
-  .btn:hover {
-    color: #e8e8e8;
-  }
-  
-  .btn:hover::before {
-    width: 100%;
-  }
-  .title {
-    display: flex;
-    justify-content: center;
-    margin: 1em;
-  }
-  
-  .titlesvg {
-    height: 12vh;
-  }
-  
-  @media screen and (max-width: 800px) {
-    p {
-      font-size: larger;
-    }
-    .btn {
-      padding: 5px 15px;
-    }
-    .titlesvg {
-      height: 8vh;
-    }
-  }
-  
-  
-  
-  .css-button-neumorphic {
-    min-width: 130px;
-    height: 40px;
-    color: #fff;
-    padding: 5px 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    display: inline-block;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background: #efefef;
-    box-shadow: 2px 2px 4px #c8d0e7, -1px -1px 3px #fff;
-    color: #585858;
-  }
-  .css-button-neumorphic:active {
-    box-shadow: inset 1px 1px 3px #c8d0e7, inset -1px -1px 3px #fff;
-  }
-  .head {
-    display: inline-block;
-  }
-  
+/* Common styles */
+
+* {
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.button-container form {
+  margin-bottom: 10px;
+}
+
+.btn {
+  width: 100%;
+  height: 50px;
+  border: 2px solid transparent;
+  /* Added border */
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  /* Added border-color transition */
+}
+
+.btn.green {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.btn.red {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.btn:hover {
+  border-color: #333;
+  /* Darker border color on hover */
+}
+
+.btn.green:hover {
+  background-color: #45a049;
+  /* Darker green for ON button on hover */
+}
+
+.btn.red:hover {
+  background-color: #c53535;
+  /* Darker red for OFF button on hover */
+}
+
+.btn:active {
+  background-color: #333;
+  /* Darker background color for active state */
+  border-color: #333;
+  /* Darker border color for active state */
+}
