@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+    <head>
+        <meta charset="UTF-8">
+        <title> SUSHI DASHBOARD</title>
+        <meta name="viewport" content="width=device-width, 
+    liinitial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <link rel="shortcut icon" href="{% static 'svg/logo.svg' %}" type="image/x-icon">
+        <style>
+            *{
+                font-family: system-ui;
+            }
+        </style>
+    </head>
+
+    <body>
+    
+        <center>
+       
+
+            <form action='OFFRelay1/' method='GET'>
+                <button type='submit' class="btn">OFF 1st Light</button>
+            </form>
+            <form action='OnRelay1/' method='GET'>
+                <button type='submit' class="btn">ON 1st Light</button>
+            </form>
+
+            <form action='OFFRelay2/' method='GET'>
+                <button type='submit' class="btn">OFF 2nd Light</button>
+            </form>
+            <form action='OnRelay2/' method='GET'>
+                <button type='submit' class="btn">ON 2nd Light</button>
+            </form>
+
+
+            <form action='OFFRelay3/' method='GET'>
+                <button type='submit' class="btn">OFF 3rd Light</button>
+            </form>
+            <form action='OnRelay3/' method='GET'>
+                <button type='submit' class="btn">ON 3rd Light</button>
+            </form>
+
+
+
+            <form action='OFFRelay4/' method='GET'>
+                <button type='submit' class="btn">OFF 4th Light</button>
+            </form>
+            <form action='OnRelay4/' method='GET'>
+                <button type='submit' class="btn">ON 4th Light</button>
+            </form>
+
+            <div class="commandinput">
+
+    </body>
+
+</html>
