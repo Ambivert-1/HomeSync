@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Home Sync</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,157 +27,202 @@
       .button-container form {
         margin: 0 10px;
       }
+
+      .btn {
+        width: 120px;
+        height: 40px;
+        font-size: 16px;
+        border-radius: 5px;
+      }
+
+      .btn.green {
+        background-color: green;
+        color: white;
+      }
+
+      .btn.red {
+        background-color: red;
+        color: white;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .navbar {
+        background-color: #4CAF50;
+        overflow: hidden;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center; /* Center align the items */
+      }
+
+      .navbar a {
+        display: inline-block; /* Display links as inline-block */
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navbar a:hover {
+        background-color: #45a049;
+        color: white;
+      }
+
+      .navbar .dropdown {
+        display: inline-block; /* Display dropdown as inline-block */
+        position: relative;
+      }
+
+      .navbar .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+        transition: background-color 0.3s;
+      }
+
+      .navbar .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+      .navbar .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navbar .dropdown-content a:hover {
+        background-color: #f1f1f1;
+        color: black;
+      }
+
+      .navbar .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
     </style>
     <script>
       var bulb1State = false;
-      var bulb2State = false;
+      var timer;
 
-      function toggleBulb(bulbNumber) {
+      function toggleBulb() {
         var bulbImage1 = document.getElementById("bulb1-image");
-        var bulbImage2 = document.getElementById("bulb2-image");
-        var onButton = document.getElementById("on-button-bulb" + bulbNumber);
-        var offButton = document.getElementById("off-button-bulb" + bulbNumber);
+        var toggleButton = document.getElementById("toggle-button");
+        var duration = parseInt(document.getElementById("timer-duration").value);
 
-        if (bulbNumber === 1) {
+        clearTimeout(timer); // Clear any existing timer
+
+        if (duration > 0 && !bulb1State) {
+          bulb1State = true;
+          bulbImage1.src = "{% static 'BULBoff.png' %}";
+          toggleButton.classList.remove("red");
+          toggleButton.classList.add("green");
+          timer = setTimeout(function() {
+            sendSignal("off"); // Send signal to turn off after timer expires
+            toggleButton.classList.add("red");
+            toggleButton.classList.remove("green");
+          }, duration * 1000); // Convert seconds to milliseconds
+        } else {
           bulb1State = !bulb1State;
           if (bulb1State) {
-            bulbImage1.src = "{% static 'BULBon.png' %}";
-            onButton.classList.add("green");
-            offButton.classList.remove("red");
-          } else {
             bulbImage1.src = "{% static 'BULBoff.png' %}";
-            onButton.classList.remove("green");
-            offButton.classList.add("red");
-          }
-          bulb2State = bulb1State;
-          updateBulb2();
-        } else if (bulbNumber === 2) {
-          bulb2State = !bulb2State;
-          if (bulb2State) {
-            bulbImage2.src = "{% static 'BULBon.png' %}";
-            onButton.classList.add("green");
-            offButton.classList.remove("red");
+            toggleButton.classList.add("red");
+            toggleButton.classList.remove("green");
+            sendSignal("off");
           } else {
-            bulbImage2.src = "{% static 'BULBoff.png' %}";
-            onButton.classList.remove("green");
-            offButton.classList.add("red");
+            bulbImage1.src = "{% static 'BULBon.png' %}";
+            toggleButton.classList.remove("red");
+            toggleButton.classList.add("green");
+            sendSignal("on");
           }
-          bulb1State = bulb2State;
-          updateBulb1();
         }
       }
 
-      function updateBulb1() {
-        var bulbImage1 = document.getElementById("bulb1-image");
-        var onButton = document.getElementById("on-button-bulb1");
-        var offButton = document.getElementById("off-button-bulb1");
-
-        if (bulb1State) {
-          bulbImage1.src = "{% static 'BULBon.png' %}";
-          onButton.classList.add("green");
-          offButton.classList.remove("red");
-        } else {
-          bulbImage1.src = "{% static 'BULBoff.png' %}";
-          onButton.classList.remove("green");
-          offButton.classList.add("red");
-        }
-      }
-
-      function updateBulb2() {
-        var bulbImage2 = document.getElementById("bulb2-image");
-        var onButton = document.getElementById("on-button-bulb2");
-        var offButton = document.getElementById("off-button-bulb2");
-
-        if (bulb2State) {
-          bulbImage2.src = "{% static 'BULBon.png' %}";
-          onButton.classList.add("green");
-          offButton.classList.remove("red");
-        } else {
-          bulbImage2.src = "{% static 'BULBoff.png' %}";
-          onButton.classList.remove("green");
-          offButton.classList.add("red");
-        }
+      function sendSignal(state) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", state === "on" ? "/OnRelay1/" : "/OFFRelay1/", true);
+        xhr.send();
       }
     </script>
   </head>
 
   <body>
     <div class="container">
-      <h1>Control Lights</h1>
-      <div class="button-container">
-        <form action="AllON/" method="GET">
-          <button
-            type="submit"
-            class="btn green"
-            onclick="toggleBulb(1); toggleBulb(2);"
-          >
-            ALL ON (BULB1 & BULB2)
-          </button>
-        </form>
-        <form action="AllOFF/" method="GET">
-          <button
-            type="submit"
-            class="btn red"
-            onclick="toggleBulb(1); toggleBulb(2);"
-          >
-            ALL OFF (BULB1 & BULB2)
-          </button>
-        </form>
+      <div class="navbar">
+        <a href="#">Home</a>
+        <div class="dropdown">
+          <button class="dropbtn">ROOMS</button>
+          <div class="dropdown-content">
+            <a href="#">Living Room</a>
+            <a href="#">Kitchen</a>
+            <!-- Add more rooms as needed -->
+          </div>
+        </div>
+        <a href="#">Devices</a>
+        <a href="#">Settings</a>
+        <!-- Add more navigation links as needed -->
       </div>
+
+      <div class="content">
+        <h1>Welcome to Home Automation</h1>
+        <!-- Add your content here -->
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>HOME SYNC</h1>
       <div class="image-container">
         <img
           id="bulb1-image"
           src="{% static 'BULBoff.png' %}"
-          src="{% static 'BULBoff.png' %}"
           alt="Bulb 1 Image"
-        />
-        <img
-          id="bulb2-image"
-          src="{% static 'BULBoff.png' %}"
-          alt="Bulb 2 Image"
         />
       </div>
       <div class="button-container">
-        <form action="OFFRelay1/" method="GET">
-          <button
-            id="off-button-bulb1"
-            type="submit"
-            class="btn red"
-            onclick="toggleBulb(1);"
-          >
-            Turn OFF BULB1
-          </button>
-        </form>
-        <form action="OnRelay1/" method="GET">
-          <button
-            id="on-button-bulb1"
-            type="submit"
-            class="btn green"
-            onclick="toggleBulb(1);"
-          >
-            Turn ON BULB1
-          </button>
-        </form>
-        <form action="OFFRelay2/" method="GET">
-          <button
-            id="off-button-bulb2"
-            type="submit"
-            class="btn red"
-            onclick="toggleBulb(2);"
-          >
-            Turn OFF BULB2
-          </button>
-        </form>
-        <form action="OnRelay2/" method="GET">
-          <button
-            id="on-button-bulb2"
-            type="submit"
-            class="btn green"
-            onclick="toggleBulb(2);"
-          >
-            Turn ON BULB2
-          </button>
-        </form>
+        <label for="timer-duration">Timer Duration (seconds):</label>
+        <input type="number" id="timer-duration" min="0" step="1" value="0" />
+        <button
+          id="toggle-button"
+          type="button"
+          class="btn red"
+          onclick="toggleBulb();"
+        >
+          TOGGLE
+        </button>
       </div>
     </div>
   </body>
