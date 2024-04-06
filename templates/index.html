@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Home Sync</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <!-- Specify the favicon -->
+    <link rel="icon" type="image/ico" href="{% static 'favicon.ico' %}" />
     <style>
       /* Inline styles */
       .container {
@@ -22,6 +24,7 @@
       .button-container {
         display: flex;
         justify-content: center;
+        
       }
 
       .button-container form {
@@ -44,6 +47,7 @@
         background-color: red;
         color: white;
       }
+
       body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -57,21 +61,23 @@
       }
 
       .navbar {
-        background-color: #4CAF50;
+        background-color: #4caf50;
         overflow: hidden;
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        text-align: center; /* Center align the items */
+        text-align: center;
+        /* Center align the items */
       }
 
       .navbar a {
-        display: inline-block; /* Display links as inline-block */
+        display: inline-block;
+        /* Display links as inline-block */
         color: white;
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
         transition: background-color 0.3s;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
 
       .navbar a:hover {
@@ -80,7 +86,8 @@
       }
 
       .navbar .dropdown {
-        display: inline-block; /* Display dropdown as inline-block */
+        display: inline-block;
+        /* Display dropdown as inline-block */
         position: relative;
       }
 
@@ -111,7 +118,7 @@
         text-decoration: none;
         display: block;
         text-align: left;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
 
       .navbar .dropdown-content a:hover {
@@ -139,15 +146,73 @@
       #timer-duration {
         width: 80px;
       }
+
+      /* Adjust size and position of logo */
+      #logo {
+        max-width: 100px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      .left-bg,
+      .right-bg {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        z-index: -1;
+      }
+
+      .left-bg {
+        left: 0;
+        opacity: 0.3;
+        background: url("{% static 'tech1.png' %}") no-repeat top left;
+        background-size: cover;
+        transform: rotate(90deg); /* Rotate image 90 degrees clockwise */
+      }
+
+      .right-bg {
+        right: 0;
+        opacity: 0.3;
+        background: url("{% static 'tech1.png' %}") no-repeat top right;
+        background-size: cover;
+        transform: rotate(
+          -90deg
+        ); /* Rotate image 90 degrees counterclockwise */
+      }
     </style>
     <script>
+      // JavaScript for dropdown functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        var dropdown = document.querySelector(".dropdown");
+        var dropdownContent = document.querySelector(".dropdown-content");
+
+        dropdown.addEventListener("click", function () {
+          dropdownContent.classList.toggle("show");
+        });
+
+        window.addEventListener("click", function (event) {
+          if (!event.target.matches(".dropbtn")) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains("show")) {
+                openDropdown.classList.remove("show");
+              }
+            }
+          }
+        });
+      });
+
       var bulb1State = false;
       var timer;
 
       function toggleBulb() {
         var bulbImage1 = document.getElementById("bulb1-image");
         var toggleButton = document.getElementById("toggle-button");
-        var duration = parseInt(document.getElementById("timer-duration").value);
+        var duration = parseInt(
+          document.getElementById("timer-duration").value
+        );
 
         clearTimeout(timer); // Clear any existing timer
 
@@ -156,7 +221,7 @@
           bulbImage1.src = "{% static 'BULBoff.png' %}";
           toggleButton.classList.remove("red");
           toggleButton.classList.add("green");
-          timer = setTimeout(function() {
+          timer = setTimeout(function () {
             sendSignal("off"); // Send signal to turn off after timer expires
             toggleButton.classList.add("red");
             toggleButton.classList.remove("green");
@@ -186,11 +251,13 @@
   </head>
 
   <body>
+    <div class="left-bg"></div>
+    <div class="right-bg"></div>
     <div class="container">
       <div class="navbar">
         <a href="#">Home</a>
         <div class="dropdown">
-          <button class="dropbtn">ROOMS</button>
+          <button class="dropbtn">Rooms</button>
           <div class="dropdown-content">
             <a href="#">Living Room</a>
             <a href="#">Kitchen</a>
@@ -201,14 +268,13 @@
         <a href="#">Settings</a>
         <!-- Add more navigation links as needed -->
       </div>
-
       <div class="content">
-        <h1>Welcome to Home Automation</h1>
+        <h1>Welcome to Home Automation with</h1>
         <!-- Add your content here -->
       </div>
     </div>
-
     <div class="container">
+      <img id="logo" src="{% static 'logo.png' %}" alt="Logo" />
       <h1>HOME SYNC</h1>
       <div class="image-container">
         <img
@@ -220,6 +286,7 @@
       <div class="button-container">
         <label for="timer-duration">Timer Duration (seconds):</label>
         <input type="number" id="timer-duration" min="0" step="1" value="0" />
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <button
           id="toggle-button"
           type="button"
